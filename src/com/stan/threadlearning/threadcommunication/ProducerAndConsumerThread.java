@@ -2,7 +2,6 @@ package com.stan.threadlearning.threadcommunication;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ProducerAndConsumerThread extends Thread {
 
@@ -31,26 +30,49 @@ public class ProducerAndConsumerThread extends Thread {
                     factory.notify();
                 }
             }
-        }, "consumer").start();
+        }, "consumer-1").start();
 
         //消费者线程
         new Thread(() -> {
-            for (int i = 0; i < 20; i++) {
+            while (true) {
                 synchronized (factory) {
-                    String string = Thread.currentThread().getName() + System.currentTimeMillis();
+
+                    if (factory.size() > 100) {
+                        try {
+                            System.out.println(Thread.currentThread().getName() + "生产者1陷入等待！");
+                            factory.wait();
+                            System.out.println(Thread.currentThread().getName() + "生产者1结束等待！");
+                            continue;
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    String string = Thread.currentThread().getName() + "-" + System.currentTimeMillis();
                     factory.add(string);
+                    System.out.println(Thread.currentThread().getName() + "产生了" + string);
                     factory.notify();
                 }
-
             }
-        }, "producer").start();
+        }, "producer-1").start();
 
         //消费者线程
         new Thread(() -> {
-            for (int i = 0; i < 20; i++) {
+            while (true) {
                 synchronized (factory) {
-                    String string = Thread.currentThread().getName() + System.currentTimeMillis();
+                    if (factory.size() > 100) {
+                        try {
+                            System.out.println(Thread.currentThread().getName() + "生产者2陷入等待！");
+                            factory.wait();
+                            System.out.println(Thread.currentThread().getName() + "生产者2结束等待！");
+                            continue;
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    String string = Thread.currentThread().getName() + "-" + System.currentTimeMillis();
                     factory.add(string);
+                    System.out.println(Thread.currentThread().getName() + "产生了" + string);
                     factory.notify();
                 }
             }
