@@ -1,5 +1,8 @@
 package com.stan.threadlearning.threadlocal;
 
+import java.io.PrintStream;
+import java.util.stream.IntStream;
+
 /**
  * <h3>Exper1</h3>
  * <p></p>
@@ -10,9 +13,9 @@ package com.stan.threadlearning.threadlocal;
 public class ThreadLocalMain {
     private static void incrementSameThreadId() {
         try {
-            for (int i = 0; i < 5; i++) {
+            IntStream.range(0, 5).forEach(i -> {
                 System.out.printf("%s_%d,threadId:%d%n", Thread.currentThread(), i, ThreadLocalId.get());
-            }
+            });
         } finally {
             ThreadLocalId.remove();
         }

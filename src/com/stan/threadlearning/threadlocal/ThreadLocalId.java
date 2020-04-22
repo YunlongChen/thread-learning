@@ -15,7 +15,7 @@ public class ThreadLocalId {
 
     // Thread local variable containing each thread's ID
     private static final ThreadLocal<Integer> threadId =
-            ThreadLocal.withInitial(nextId::getAndIncrement);
+            ThreadLocal.withInitial(nextId::incrementAndGet);
 
     // Returns the current thread's unique ID, assigning it if necessary
     public static int get() {
